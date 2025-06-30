@@ -1,0 +1,22 @@
+name: Java CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v2
+
+      - name: Configurar Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Compilar y ejecutar pruebas
+        run: |
+          cd healthtrack
+          mvn clean test
