@@ -6,9 +6,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.net.URL;
 
 /**
  * Prueba funcional con Selenium para actualizar peso desde HTML.
@@ -24,8 +26,14 @@ public class PesoWebTest extends TestCase {
     options.addArguments("--headless");
     options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
+    options.addArguments("--user-data-dir=/tmp/chrome-profile");
 
-    driver = new ChromeDriver();
+    String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
+    if (remoteUrl != null && !remoteUrl.isEmpty()) {
+      driver = new RemoteWebDriver(new URL(remoteUrl), options);
+    } else {
+      driver = new ChromeDriver(options);
+    }
   }
 
   public void testActualizarPesoDesdeFormulario() {
