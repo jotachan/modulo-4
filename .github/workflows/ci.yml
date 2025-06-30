@@ -1,4 +1,4 @@
-name: Java CI
+name: Java CI con Selenium
 
 on:
   push:
@@ -7,6 +7,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      selenium:
+        image: selenium/standalone-chrome:latest
+        ports:
+          - 4444:4444
+        options: --shm-size=2g
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v2
@@ -21,3 +27,5 @@ jobs:
         run: |
           cd healthtrack
           mvn clean test
+        env:
+          SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
