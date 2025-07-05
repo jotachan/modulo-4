@@ -16,14 +16,12 @@ jobs:
         options: >-
           --shm-size=2g
         
-        html-server:
-        image: python:3
+      html-server:
+        image: nginx:alpine
         ports:
-          - 8000:8000
+        - 8000:80
         volumes:
-          - ./web:/usr/src/app
-        working-directory: /usr/src/app
-        command: python3 -m http.server 8000
+          - ./web:/usr/share/nginx/html:ro
 
     steps:
       - name: Checkout del repositorio
