@@ -32,7 +32,7 @@ public class PesoWebTest extends TestCase {
 
   public void testActualizarPesoDesdeFormulario() {
     // Accede al HTML servido por el contenedor python
-    driver.get("http://host.docker.internal:8000/actualizar_peso.html");
+    driver.get("http://localhost:8000/actualizar_peso.html");
 
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
     wait.until(ExpectedConditions.presenceOfElementLocated(By.id("peso")));
