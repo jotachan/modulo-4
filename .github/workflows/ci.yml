@@ -35,4 +35,6 @@ jobs:
 
       - name: Compilar y ejecutar pruebas
         working-directory: ./healthtrack
-        run: SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub mvn test
+        run:  |
+          sleep 5
+          SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub mvn test
