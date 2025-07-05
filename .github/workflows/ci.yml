@@ -34,6 +34,4 @@ jobs:
           distribution: 'temurin'
 
       - name: Compilar y ejecutar pruebas
-        run: |
-          cd tests
-          SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub mvn test
+        run: SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub mvn test
