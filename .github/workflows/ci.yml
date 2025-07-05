@@ -34,4 +34,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Compilar y ejecutar pruebas
-        run: SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub mvn test
+        run: |
+          cd healthtrack
+          SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub mvn test
