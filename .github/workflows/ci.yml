@@ -1,40 +1,44 @@
-name: Java CI con Selenium
+name: Java + Selenium CI
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
-    services:
-      selenium:
-        image: selenium/standalone-chrome:latest
-        ports:
-          - 4444:4444
-        options: >-
-          --shm-size=2g
-        
-      html-server:
-        image: nginx:alpine
-        ports:
-          - 8000:80
-        volumes:
-          - ./web:/usr/share/nginx/html:ro
-
     steps:
-      - name: Checkout del repositorio
+      # 1. Clona el repo
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Configurar Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+      # 2. Instala Docker Compose
+      - name: Set up Docker Compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
 
-      - name: Compilar y ejecutar pruebas
-        working-directory: ./healthtrack
-        run:  |
-          sleep 5
-          SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub mvn test
+      # 3. Levanta servicios con docker-compose
+      - name: Build and start containers
+        run: docker compose up -d selenium html-server
+
+      # 4. Espera a que Selenium esté listo (respuesta HTTP 200 en /status)
+      - name: Wait for Selenium to be ready
+        run: |
+          for i in {1..30}; do
+            echo "Esperando Selenium... intento $i"
+            if curl -s http://localhost:4444/status | grep -q '"ready":true'; then
+              echo "Selenium está listo ✅"
+              break
+            fi
+            sleep 2
+          done
+
+      # 5. Ejecuta los tests con Maven en el contenedor
+      - name: Run tests with Maven container
+        run: docker compose run --rm maven mvn test
+
+      # 6. Apaga los contenedores
+      - name: Shutdown
+        run: docker compose down

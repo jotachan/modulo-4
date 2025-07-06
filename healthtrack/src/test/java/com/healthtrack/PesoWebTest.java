@@ -26,8 +26,12 @@ public class PesoWebTest extends TestCase {
     options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
 
-    driver = new RemoteWebDriver(
-        new URL("http://localhost:4444/wd/hub"), options);
+    String remoteUrl = System.getenv("SELENIUM_REMOTE_URL");
+    if (remoteUrl == null || remoteUrl.isEmpty()) {
+      remoteUrl = "http://localhost:4444/wd/hub";
+    }
+
+    driver = new RemoteWebDriver(new URL(remoteUrl), options);
   }
 
   public void testActualizarPesoDesdeFormulario() {

@@ -8,11 +8,29 @@ services:
     shm_size: 2g
 
   html-server:
-    image: python:3
-    container_name: html-server
-    working_dir: /usr/src/app
-    volumes:
-      - ./healthtrack/web:/usr/src/app
-    command: python3 -m http.server 8000
+    image: nginx:alpine
     ports:
-      - "8000:8000"
+      - "8000:80"
+    volumes:
+      - ./healthtrack/web:/usr/share/nginx/html:ro
+
+  maven:
+    image: maven:3.9-eclipse-temurin-17
+    depends_on:
+      - selenium
+      - html-server
+    volumes:
+      - ./healthtrack:/usr/src/app
+    working_dir: /usr/src/app
+    environment:
+      SELENIUM_REMOTE_URL: http://selenium:4444/wd/hub
+    command: >
+      sh -c "
+        apt-get update && apt-get install -y curl &&
+        echo '⏳ Esperando a que Selenium esté listo...' &&
+        until curl -s http://selenium:4444/wd/hub/status | grep -q '\"ready\": true'; do
+          sleep 1;
+        done &&
+        echo '✅ Selenium está listo. Ejecutando pruebas...' &&
+        mvn test
+      "
