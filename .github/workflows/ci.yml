@@ -11,20 +11,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Clona el repo
-      - name: Checkout repo
+    
+      - name: Clona el repo
         uses: actions/checkout@v3
 
-      # 2. Instala Docker Compose
-      - name: Set up Docker Compose
+      - name: Instala Docker Compose
         run: sudo apt-get update && sudo apt-get install -y docker-compose
 
-      # 3. Levanta servicios con docker-compose
-      - name: Build and start containers
+
+      - name: Levanta servicios con docker-compose
         run: docker compose up -d selenium html-server
 
-      # 4. Espera a que Selenium esté listo (respuesta HTTP 200 en /status)
-      - name: Wait for Selenium to be ready
+
+      - name: Espera a que Selenium esté listo (respuesta HTTP 200 en /status)
         run: |
           for i in {1..30}; do
             echo "Esperando Selenium... intento $i"
@@ -35,11 +34,9 @@ jobs:
             sleep 2
           done
 
-      # 5. Ejecuta los tests con Maven en el contenedor
-      - name: Run tests with Maven container
+      - name: Ejecuta los tests con Maven en el contenedor
         run: docker compose run --rm maven mvn test
 
-      # 6. Ejecuta pruebas de carga con jmeter
       - name: Ejecutar pruebas JMeter con Docker Compose
         run: docker compose up --abort-on-container-exit jmeter
 
@@ -49,6 +46,5 @@ jobs:
           name: jmeter-resultados
           path: jmeter/resultados/resultados.jtl
 
-      # 7. Apaga los contenedores
-      - name: Shutdown
+      - name: Apaga los contenedores
         run: docker compose down
