@@ -25,7 +25,7 @@ En conjunto, esta estrategia de pruebas no solo permite validar la corrección d
 
 ---------
 
-## 🔄 Automatización del Proceso de Pruebas con CI/CD (2 pts)
+## 🔄 Automatización del Proceso de Pruebas con CI/CD
 
 Como parte de la estrategia de mejora continua en la plataforma HealthTrack, se configuró un pipeline de integración continua utilizando **GitHub Actions**, con el objetivo de automatizar la validación del código y garantizar que los errores sean detectados de forma temprana. Esta automatización permite ejecutar las pruebas de manera inmediata tras cada cambio en el repositorio, reduciendo el tiempo entre el desarrollo y la identificación de fallos.
 
