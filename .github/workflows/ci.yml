@@ -39,6 +39,16 @@ jobs:
       - name: Run tests with Maven container
         run: docker compose run --rm maven mvn test
 
-      # 6. Apaga los contenedores
+      # 6. Ejecuta pruebas de carga con jmeter
+      - name: Ejecutar pruebas JMeter con Docker Compose
+        run: docker compose up --abort-on-container-exit jmeter
+
+      - name: Guardar resultados de JMeter como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-resultados
+          path: jmeter/resultados/resultados.jtl
+
+      # 7. Apaga los contenedores
       - name: Shutdown
         run: docker compose down

@@ -34,3 +34,6 @@ Thumbs.db
 # GitHub Actions cache/workflows (opcional)
 .github/workflows/*.log
 .github/workflows/*.tmp
+
+jmeter/resultados/*
+!jmeter/resultados/.gitkeep

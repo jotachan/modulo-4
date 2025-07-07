@@ -34,3 +34,13 @@ services:
         echo '✅ Selenium está listo. Ejecutando pruebas...' &&
         mvn test
       "
+
+  jmeter:
+    image: justb4/jmeter
+    container_name: jmeter
+    volumes:
+      - ./jmeter/test:/tests
+      - ./jmeter/resultados:/resultados
+    working_dir: /tests
+    entrypoint: jmeter
+    command: -n -t prueba-peso.jmx -l /resultados/resultados.jtl
